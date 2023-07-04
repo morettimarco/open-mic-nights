@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/open-mic-nights/static/css/main.fb5b03df.chunk.css",
+    "main.js": "/open-mic-nights/static/js/main.2233a0a5.chunk.js",
+    "main.js.map": "/open-mic-nights/static/js/main.2233a0a5.chunk.js.map",
+    "runtime-main.js": "/open-mic-nights/static/js/runtime-main.3e08f441.js",
+    "runtime-main.js.map": "/open-mic-nights/static/js/runtime-main.3e08f441.js.map",
+    "static/js/2.23e0742b.chunk.js": "/open-mic-nights/static/js/2.23e0742b.chunk.js",
+    "static/js/2.23e0742b.chunk.js.map": "/open-mic-nights/static/js/2.23e0742b.chunk.js.map",
+    "index.html": "/open-mic-nights/index.html",
+    "static/css/main.fb5b03df.chunk.css.map": "/open-mic-nights/static/css/main.fb5b03df.chunk.css.map",
+    "static/js/2.23e0742b.chunk.js.LICENSE.txt": "/open-mic-nights/static/js/2.23e0742b.chunk.js.LICENSE.txt",
+    "static/media/milano-2.80d62e66.png": "/open-mic-nights/static/media/milano-2.80d62e66.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.3e08f441.js",
+    "static/js/2.23e0742b.chunk.js",
+    "static/css/main.fb5b03df.chunk.css",
+    "static/js/main.2233a0a5.chunk.js"
+  ]
+}
