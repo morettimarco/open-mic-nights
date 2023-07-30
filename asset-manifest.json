@@ -1,21 +1,21 @@
 {
   "files": {
-    "main.css": "/static/css/main.fb5b03df.chunk.css",
-    "main.js": "/static/js/main.66bf6cec.chunk.js",
-    "main.js.map": "/static/js/main.66bf6cec.chunk.js.map",
+    "main.css": "/static/css/main.47d1c18b.chunk.css",
+    "main.js": "/static/js/main.deeccd46.chunk.js",
+    "main.js.map": "/static/js/main.deeccd46.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.50d77290.js",
     "runtime-main.js.map": "/static/js/runtime-main.50d77290.js.map",
     "static/js/2.a65e9a19.chunk.js": "/static/js/2.a65e9a19.chunk.js",
     "static/js/2.a65e9a19.chunk.js.map": "/static/js/2.a65e9a19.chunk.js.map",
     "index.html": "/index.html",
-    "static/css/main.fb5b03df.chunk.css.map": "/static/css/main.fb5b03df.chunk.css.map",
+    "static/css/main.47d1c18b.chunk.css.map": "/static/css/main.47d1c18b.chunk.css.map",
     "static/js/2.a65e9a19.chunk.js.LICENSE.txt": "/static/js/2.a65e9a19.chunk.js.LICENSE.txt",
     "static/media/milano-2.80d62e66.png": "/static/media/milano-2.80d62e66.png"
   },
   "entrypoints": [
     "static/js/runtime-main.50d77290.js",
     "static/js/2.a65e9a19.chunk.js",
-    "static/css/main.fb5b03df.chunk.css",
-    "static/js/main.66bf6cec.chunk.js"
+    "static/css/main.47d1c18b.chunk.css",
+    "static/js/main.deeccd46.chunk.js"
   ]
 }
