@@ -5,6 +5,7 @@ import Map from "./Map";
 import { BsInstagram } from "react-icons/bs";
 import { BsFacebook } from "react-icons/bs";
 import { BsWhatsapp } from "react-icons/bs";
+import { BsEnvelopeAt } from "react-icons/bs";
 
 const SpreadsheetId = "1_X_znvg8kGbFMXoys011182T5ZTGONCsveY9uLEWsr8";
 const { GoogleSpreadsheet } = require("google-spreadsheet");
@@ -59,11 +60,11 @@ function TableAndMap() {
     isFetching: false,
   });
 
-    const defaultColumnSizing = {
+  const defaultColumnSizing = {
     size: 1500,
     minSize: 20,
     maxSize: Number.MAX_SAFE_INTEGER,
-  }
+  };
 
   useEffect(() => {
     (async function () {
@@ -105,6 +106,7 @@ function TableAndMap() {
           FacebookGroup: row["Facebook Group"],
           FacebookPage: row["Facebook Page"],
           WhatsApp: row["WhatsApp"],
+          Email: row["Email"],
           Frequency: row["Frequency"],
           Instagram: row["Instagram"],
           Latitude: row["Latitude"],
@@ -158,6 +160,27 @@ function TableAndMap() {
                 <a href={row.original.WhatsApp}>
                   <BsWhatsapp />
                 </a>
+                <a
+                  href={
+                    row.original.Email === "" // if there is no email, then no link should be shown
+                      ? ""
+                      : row.original.Language === "Italian" // if the language is italian then the subject is different
+                      ? [
+                          "mailto:",
+                          row.original.Email,
+                          "?subject=Iscrizione%20open%20mic%20",
+                          row.original.Venue,
+                        ].join("")
+                      : [
+                          "mailto:",
+                          row.original.Email,
+                          "?subject=Sign%20up%20to%20open%20mic%20",
+                          row.original.Venue,
+                        ].join("")
+                  }
+                >
+                  <BsEnvelopeAt />
+                </a>
               </div>
             );
           },
@@ -192,6 +215,9 @@ function TableAndMap() {
         {
           Header: "Status",
           accessor: "Status",
+          maxWidth: 600,
+          minWidth: 250,
+          width: 400,
           Filter: SelectColumnFilter,
           filter: "equals",
         },
@@ -238,7 +264,7 @@ function TableAndMap() {
           Header: "Venue",
           accessor: "Venue",
           maxWidth: 600,
-          minWidth: 300,
+          minWidth: 200,
           width: 400,
           Filter: SearchColumnFilter,
           disableFilters: true,
@@ -252,7 +278,7 @@ function TableAndMap() {
         {
           Header: "Address",
           accessor: "Address",
-           maxWidth: 600,
+          maxWidth: 600,
           minWidth: 300,
           width: 400,
           Filter: SearchColumnFilter,
@@ -353,7 +379,14 @@ function TableAndMap() {
               {headerGroups.map((headerGroup) => (
                 <tr {...headerGroup.getHeaderGroupProps()}>
                   {headerGroup.headers.map((column) => (
-                    <th {...column.getHeaderProps({style: { minWidth: column.minWidth, width: column.width },})}>
+                    <th
+                      {...column.getHeaderProps({
+                        style: {
+                          minWidth: column.minWidth,
+                          width: column.width,
+                        },
+                      })}
+                    >
                       {column.render("Header")}
                       <div>
                         {column.canFilter ? column.render("Filter") : null}
