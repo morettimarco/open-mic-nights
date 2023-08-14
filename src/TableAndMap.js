@@ -6,6 +6,7 @@ import { BsInstagram } from "react-icons/bs";
 import { BsFacebook } from "react-icons/bs";
 import { BsWhatsapp } from "react-icons/bs";
 import { BsEnvelopeAt } from "react-icons/bs";
+import { BsGoogle } from "react-icons/bs";
 
 const SpreadsheetId = "1_X_znvg8kGbFMXoys011182T5ZTGONCsveY9uLEWsr8";
 const { GoogleSpreadsheet } = require("google-spreadsheet");
@@ -106,6 +107,7 @@ function TableAndMap() {
           FacebookGroup: row["Facebook Group"],
           FacebookPage: row["Facebook Page"],
           WhatsApp: row["WhatsApp"],
+          GForm: row["Google Form"],
           Email: row["Email"],
           Frequency: row["Frequency"],
           Instagram: row["Instagram"],
@@ -159,6 +161,9 @@ function TableAndMap() {
                 </a>
                 <a href={row.original.WhatsApp}>
                   <BsWhatsapp />
+                </a>
+                <a href={row.original.GForm}>
+                  <BsGoogle />
                 </a>
                 <a
                   href={
