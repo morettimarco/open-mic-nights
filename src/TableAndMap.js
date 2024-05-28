@@ -153,16 +153,16 @@ function TableAndMap() {
           Cell: ({ row }) => {
             return (
               <div>
-                <a href={row.original.Instagram}>
+                <a href={row.original.Instagram} target="_blank" rel="noopener noreferrer">
                   <BsInstagram />
                 </a>
-                <a href={row.original.FacebookPage}>
+                <a href={row.original.FacebookPage} target="_blank" rel="noopener noreferrer">
                   <BsFacebook />
                 </a>
                 <a href={row.original.WhatsApp}>
                   <BsWhatsapp />
                 </a>
-                <a href={row.original.GForm}>
+                <a href={row.original.GForm} target="_blank" rel="noopener noreferrer">
                   <BsGoogle />
                 </a>
                 <a
@@ -193,7 +193,7 @@ function TableAndMap() {
         {
           Header: "Name",
           accessor: "Name",
-          disableFilters: true,
+          disableFilters: false,
           maxWidth: 400,
           minWidth: 300,
           width: 200,

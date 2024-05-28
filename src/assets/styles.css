@@ -37,3 +37,27 @@ a[href=""] {
 .is-link {
   color: #3273dc; /* Link color in Bulma */
 }
+
+.navbar {
+  padding: 0.5rem 1rem;
+}
+
+.navbar-item {
+  padding: 0.5rem 0.75rem;
+}
+
+.title-subtitle-container .title {
+  font-size: 1.25rem;
+}
+
+.title-subtitle-container .subtitle {
+  font-size: 0.875rem;
+}
+
+.navbar-burger {
+  font-size: 1.5em;
+}
+
+.navbar-item-centered {
+  text-align: center;
+}
