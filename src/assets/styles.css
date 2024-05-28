@@ -61,3 +61,11 @@ a[href=""] {
 .navbar-item-centered {
   text-align: center;
 }
+
+/* styles.css */
+.table-cell-centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}

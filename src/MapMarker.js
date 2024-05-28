@@ -41,7 +41,7 @@ class MapMarker extends React.Component {
 }
 
 const InfoWindow = (props) => {
-  const { name, address, weekday, onClose } = props;
+  const { name, address, weekday, status, onClose } = props;
   const infoWindowStyle = {
     position: "relative",
     bottom: 50,
@@ -56,6 +56,11 @@ const InfoWindow = (props) => {
     borderRadius: "25px",
   };
 
+  const inactiveStyle = {
+    color: 'red',
+    fontWeight: 'bold',
+  };
+
   return (
     <div style={infoWindowStyle}>
       <button onClick={onClose} style={{ float: "right", background: "none", border: "none", cursor: "pointer" }}>✖️</button>
@@ -63,6 +68,7 @@ const InfoWindow = (props) => {
       <div style={{ fontSize: 10 }}>
         {weekday} at {address}
       </div>
+      {status === 'Inactive' && <div style={inactiveStyle}>Inactive</div>}
     </div>
   );
 };
