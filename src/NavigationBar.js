@@ -1,10 +1,14 @@
+// Import necessary modules and components
 import logo from "./assets/milano-2.png";
 import { BsCaretDownSquareFill } from "react-icons/bs";
 
+// Define the URL for the Google Form
 const GoogleForm = "https://forms.gle/vDuLfQ7Bc9iKxT2o8";
 
+// Define the NavigationBar component
 function NavigationBar() {
   return (
+    // Define the navigation bar
     <nav className="navbar is-light has-shadow py-2 mb-2">
       <div className="navbar-brand">
         <a className="navbar-item" style={{ padding: "0.9rem" }}>
@@ -24,6 +28,7 @@ function NavigationBar() {
           <div
             className="navbar-burger"
             onClick={() =>
+              // Toggle the active state of the navigation links
               document.getElementById("nav-links").classList.toggle("is-active")
             }
           >
@@ -54,35 +59,41 @@ function NavigationBar() {
   );
 }
 
+// Export the NavigationBar component
 export default NavigationBar;
 
+// Add an event listener for the DOMContentLoaded event
 document.addEventListener("DOMContentLoaded", () => {
-  // Functions to open and close a modal
+  // Define a function to open a modal
   function openModal($el) {
     $el.classList.add("is-active");
   }
 
+  // Define a function to close a modal
   function closeModal($el) {
     $el.classList.remove("is-active");
   }
 
+  // Define a function to close all modals
   function closeAllModals() {
+    // Close each modal
     (document.querySelectorAll(".modal") || []).forEach(($modal) => {
       closeModal($modal);
     });
   }
 
-  // Add a click event on buttons to open a specific modal
+  // Add a click event listener to each modal trigger
   (document.querySelectorAll(".js-modal-trigger") || []).forEach(($trigger) => {
     const modal = $trigger.dataset.target;
     const $target = document.getElementById(modal);
 
+    // Open the target modal when the trigger is clicked
     $trigger.addEventListener("click", () => {
       openModal($target);
     });
   });
 
-  // Add a click event on various child elements to close the parent modal
+  // Add a click event listener to each modal close element
   (
     document.querySelectorAll(
       ".modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button"
@@ -90,13 +101,15 @@ document.addEventListener("DOMContentLoaded", () => {
   ).forEach(($close) => {
     const $target = $close.closest(".modal");
 
+    // Close the parent modal when the close element is clicked
     $close.addEventListener("click", () => {
       closeModal($target);
     });
   });
 
-  // Add a keyboard event to close all modals
+  // Add a keydown event listener to the document
   document.addEventListener("keydown", (event) => {
+    // Close all modals when the Escape key is pressed
     if (event.code === "Escape") {
       closeAllModals();
     }

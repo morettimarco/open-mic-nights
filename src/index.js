@@ -1,20 +1,19 @@
+// Importing necessary modules from react, react-dom and local files
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import "./assets/styles.css";
-
 import TableAndMap from "./TableAndMap";
 import NavigationBar from "./NavigationBar";
 
+// Constants for GitHub and Google Sheets URLs
 const GitHubURL = "https://github.com/morettimarco/open-mic-nights";
-
 const SpreadsheetId = "1_X_znvg8kGbFMXoys011182T5ZTGONCsveY9uLEWsr8";
 const SpreadsheetURL =
   "https://docs.google.com/spreadsheets/d/" + SpreadsheetId;
 
-// This is a custom filter UI for selecting
-// a unique option from a list
-
+// Main App component
 function App() {
+  // Array of Q&A objects to be displayed on the page
   const qna = [
     {
       question: "Found a bug? Wanna contribute? Rip the site and f**k us?",
@@ -40,13 +39,15 @@ function App() {
           <a href="https://apuchitnis.github.io/open-mic-nights/">
             London Standup Comedy Map
           </a>{" "}
-          and to the awsome{" "}
+          and to the awesome{" "}
           <a href="https://apuchitnis.github.io/"> Apu Chitnis</a> for sharing
           it.
         </p>
       ),
     },
   ];
+
+  // Render the NavigationBar, TableAndMap, and Q&A sections
   return (
     <>
       <NavigationBar />
@@ -77,5 +78,7 @@ function App() {
   );
 }
 
+// Get the root element from the HTML
 const rootElement = document.getElementById("app");
+// Render the App component into the root element
 ReactDOM.render(<App />, rootElement);
