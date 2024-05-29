@@ -1,22 +1,26 @@
+// Importing necessary libraries and components
 import React, { useState, useEffect } from "react";
 import { useFilters, useTable } from "react-table";
-import { BsPencilSquare } from "react-icons/bs";
+import {
+  BsPencilSquare,
+  BsInstagram,
+  BsFacebook,
+  BsWhatsapp,
+  BsEnvelopeAt,
+  BsGoogle,
+} from "react-icons/bs";
 import Map from "./Map";
-import { BsInstagram } from "react-icons/bs";
-import { BsFacebook } from "react-icons/bs";
-import { BsWhatsapp } from "react-icons/bs";
-import { BsEnvelopeAt } from "react-icons/bs";
-import { BsGoogle } from "react-icons/bs";
+import { GoogleSpreadsheet } from "google-spreadsheet";
+import { ApiKey } from "./constants";
 
+// Spreadsheet ID
 const SpreadsheetId = "1_X_znvg8kGbFMXoys011182T5ZTGONCsveY9uLEWsr8";
-const { GoogleSpreadsheet } = require("google-spreadsheet");
-const { ApiKey } = require("./constants");
 
+// Function to create a select filter for the table
 function SelectColumnFilter({
   column: { filterValue, setFilter, preFilteredRows, id },
 }) {
-  // Calculate the options for filtering
-  // using the preFilteredRows
+  // Calculate the options for filtering using the preFilteredRows
   const options = React.useMemo(() => {
     const options = new Set();
     preFilteredRows.forEach((row) => {
@@ -131,6 +135,13 @@ function TableAndMap() {
   const columns = React.useMemo(() => {
     if (!data.isFetching && data.headerValues != null) {
       return [
+        // Define your columns here
+        // You can add more columns if necessary
+        // Each column is an object with properties like Header, accessor, Cell, Filter etc.
+        // Header: The text shown in the column header
+        // accessor: The value representing the column
+        // Cell: A method to render the cell in the column
+        // Filter: A method to filter the data in the column
         {
           Header: "",
           accessor: "UpdateInfoFormLink",
@@ -153,16 +164,28 @@ function TableAndMap() {
           Cell: ({ row }) => {
             return (
               <div>
-                <a href={row.original.Instagram} target="_blank" rel="noopener noreferrer">
+                <a
+                  href={row.original.Instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <BsInstagram />
                 </a>
-                <a href={row.original.FacebookPage} target="_blank" rel="noopener noreferrer">
+                <a
+                  href={row.original.FacebookPage}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <BsFacebook />
                 </a>
                 <a href={row.original.WhatsApp}>
                   <BsWhatsapp />
                 </a>
-                <a href={row.original.GForm} target="_blank" rel="noopener noreferrer">
+                <a
+                  href={row.original.GForm}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <BsGoogle />
                 </a>
                 <a
@@ -197,7 +220,11 @@ function TableAndMap() {
           maxWidth: 300,
           minWidth: 300,
           //width: 200,
-          Cell: ({ cell: { value } }) => <b><i>{value}</i></b>,
+          Cell: ({ cell: { value } }) => (
+            <b>
+              <i>{value}</i>
+            </b>
+          ),
           Filter: SearchColumnFilter,
         },
         {
@@ -320,10 +347,12 @@ function TableAndMap() {
     return [];
   }, [data]);
 
+  // Initial filter settings
   const initialFilterSettings = React.useMemo(() => {
     return [{ id: "BackOn", value: "Yes" }];
   });
 
+  // Create an instance of the table
   const {
     getTableProps,
     getTableBodyProps,
@@ -347,7 +376,7 @@ function TableAndMap() {
 
   // line is zero-based
   // line is the row number that you want to see into view after scroll
-
+  // Render the component
   return (
     <>
       <div className="columns is-multiline">

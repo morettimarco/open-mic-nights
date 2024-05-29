@@ -7,20 +7,24 @@ function NavigationBar() {
   return (
     <nav className="navbar is-light has-shadow py-2 mb-2">
       <div className="navbar-brand">
-        <a className="navbar-item" style={{ padding: '0.9rem' }}>
-          <img src={logo} style={{ maxHeight: '120px' }} />
+        <a className="navbar-item" style={{ padding: "0.9rem" }}>
+          <img src={logo} style={{ maxHeight: "120px" }} />
         </a>
         <div className="navbar-start">
           <div className="navbar-item">
             <div className="title-subtitle-container">
-              <p className="title" style={{ fontSize: '1.75rem' }}>Milan Standup Comedy Map</p>
-              <p className="subtitle" style={{ fontSize: '0.875rem' }}>Perform comedy near you</p>
+              <p className="title" style={{ fontSize: "1.75rem" }}>
+                Milan Standup Comedy Map
+              </p>
+              <p className="subtitle" style={{ fontSize: "0.875rem" }}>
+                Perform comedy near you
+              </p>
             </div>
           </div>
           <div
             className="navbar-burger"
             onClick={() =>
-              document.getElementById('nav-links').classList.toggle('is-active')
+              document.getElementById("nav-links").classList.toggle("is-active")
             }
           >
             <BsCaretDownSquareFill fontSize="1.5em" />

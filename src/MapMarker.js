@@ -57,18 +57,28 @@ const InfoWindow = (props) => {
   };
 
   const inactiveStyle = {
-    color: 'red',
-    fontWeight: 'bold',
+    color: "red",
+    fontWeight: "bold",
   };
 
   return (
     <div style={infoWindowStyle}>
-      <button onClick={onClose} style={{ float: "right", background: "none", border: "none", cursor: "pointer" }}>✖️</button>
+      <button
+        onClick={onClose}
+        style={{
+          float: "right",
+          background: "none",
+          border: "none",
+          cursor: "pointer",
+        }}
+      >
+        ✖️
+      </button>
       <div style={{ fontSize: 14 }}>{name} </div>
       <div style={{ fontSize: 10 }}>
         {weekday} at {address}
       </div>
-      {status === 'Inactive' && <div style={inactiveStyle}>Inactive</div>}
+      {status === "Inactive" && <div style={inactiveStyle}>Inactive</div>}
     </div>
   );
 };
