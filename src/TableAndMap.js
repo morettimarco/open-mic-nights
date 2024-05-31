@@ -82,6 +82,7 @@ function TableAndMap() {
 
         const sheet = doc.sheetsByIndex[0];
         const rows = await sheet.getRows();
+        rows.sort((a, b) => a.Name.localeCompare(b.Name));
 
         setData({
           headerValues: sheet.headerValues,
@@ -95,8 +96,11 @@ function TableAndMap() {
     })();
   }, []);
 
+  // Define the rowsData variable using React.useMemo()
   const rowsData = React.useMemo(() => {
+    // Check if data is not fetching and headerValues is not null
     if (!data.isFetching && data.headerValues != null) {
+      // Map the rows data to a new array of objects
       return data.rows.map((row) => {
         return {
           Address: row["Address"],
@@ -129,6 +133,7 @@ function TableAndMap() {
         };
       });
     }
+    // Return an empty array if data is fetching or headerValues is null
     return [];
   }, [data]);
 
