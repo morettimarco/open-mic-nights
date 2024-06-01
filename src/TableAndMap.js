@@ -1,5 +1,5 @@
 // Importing necessary libraries and components
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useFilters, useTable } from "react-table";
 import {
   BsPencilSquare,
@@ -48,36 +48,46 @@ function SelectColumnFilter({
   );
 }
 
+/**
+ * A search filter for a column in a table.
+ *
+ * @param {Object} column - The column to filter.
+ * @param {string} column.filterValue - The current filter value.
+ * @param {function} column.setFilter - The function to call to set the filter value.
+ * @returns {JSX.Element} - The search input element.
+ */
 function SearchColumnFilter({ column: { filterValue, setFilter } }) {
   return (
+    // The search input element
     <input
-      className="input is-small"
-      value={filterValue || ""}
-      onChange={(e) => setFilter(e.target.value)}
+      className="input is-small" // The class name for styling
+      value={filterValue || ""} // The current filter value or an empty string
+      onChange={(e) => setFilter(e.target.value)} // The function to call when the input value changes
     />
   );
 }
 
-function TableAndMap() {
+/**
+ * Custom hook to fetch data from a Google Spreadsheet.
+ *
+ * @param {string} spreadsheetId - The ID of the Google Spreadsheet.
+ * @param {string} apiKey - The API key to access the Google Spreadsheet.
+ * @returns {Object} - The fetched data including header values, rows, and fetching status.
+ */
+function useFetchData(spreadsheetId, apiKey) {
   const [data, setData] = useState({
     headerValues: null,
     rows: [],
     isFetching: false,
   });
 
-  const defaultColumnSizing = {
-    size: 1500,
-    minSize: 20,
-    maxSize: Number.MAX_SAFE_INTEGER,
-  };
-
   useEffect(() => {
-    (async function () {
+    async function fetchData() {
       try {
         setData({ ...data, isFetching: true });
 
-        const doc = new GoogleSpreadsheet(SpreadsheetId);
-        doc.useApiKey(ApiKey);
+        const doc = new GoogleSpreadsheet(spreadsheetId);
+        doc.useApiKey(apiKey);
         await doc.loadInfo();
 
         const sheet = doc.sheetsByIndex[0];
@@ -93,71 +103,76 @@ function TableAndMap() {
         console.error(e);
         setData({ ...data, isFetching: false });
       }
-    })();
-  }, []);
-
-  // Define the rowsData variable using React.useMemo()
-  const rowsData = React.useMemo(() => {
-    // Check if data is not fetching and headerValues is not null
-    if (!data.isFetching && data.headerValues != null) {
-      // Map the rows data to a new array of objects
-      return data.rows.map((row) => {
-        return {
-          Address: row["Address"],
-          AudienceEntryFee: row["Audience Entry Fee"],
-          HowToBook: row["Contact / Book a Spot"],
-          Language: row["Language"],
-          Category: row["Event Category"],
-          SubCategory: row["Event Sub-Category"],
-          Status: row["Status"],
-          OrganizerName: row["Organizer Name"],
-          Description: row["Event Description"],
-          FacebookGroup: row["Facebook Group"],
-          FacebookPage: row["Facebook Page"],
-          WhatsApp: row["WhatsApp"],
-          GForm: row["Google Form"],
-          Email: row["Email"],
-          Frequency: row["Frequency"],
-          Instagram: row["Instagram"],
-          Latitude: row["Latitude"],
-          Level: row["Comedian Level"],
-          Longitude: row["Longitude"],
-          Name: row["Name"],
-          RowNumber: row.rowNumber,
-          Time: row["Event Time"],
-          UpdateInfoFormLink: row["Update Info Form Link"],
-          Venue: row["Venue"],
-          Weekday: row["Weekday / Month"],
-          Website: row["Website"],
-          WheelchairAccess: row["Wheelchair Access"],
-        };
-      });
     }
-    // Return an empty array if data is fetching or headerValues is null
+
+    fetchData();
+  }, [spreadsheetId, apiKey]);
+
+  return data;
+}
+
+/**
+ * Custom hook to process the rows data.
+ *
+ * @param {Object} data - The data object containing header values, rows, and fetching status.
+ * @returns {Array} - The processed rows data.
+ */
+function useRowsData(data) {
+  return useMemo(() => {
+    if (!data.isFetching && data.headerValues != null) {
+      return data.rows.map((row) => ({
+        Address: row["Address"],
+        AudienceEntryFee: row["Audience Entry Fee"],
+        HowToBook: row["Contact / Book a Spot"],
+        Language: row["Language"],
+        Category: row["Event Category"],
+        SubCategory: row["Event Sub-Category"],
+        Status: row["Status"],
+        OrganizerName: row["Organizer Name"],
+        Description: row["Event Description"],
+        FacebookGroup: row["Facebook Group"],
+        FacebookPage: row["Facebook Page"],
+        WhatsApp: row["WhatsApp"],
+        GForm: row["Google Form"],
+        Email: row["Email"],
+        Frequency: row["Frequency"],
+        Instagram: row["Instagram"],
+        Latitude: row["Latitude"],
+        Level: row["Comedian Level"],
+        Longitude: row["Longitude"],
+        Name: row["Name"],
+        RowNumber: row.rowNumber,
+        Time: row["Event Time"],
+        UpdateInfoFormLink: row["Update Info Form Link"],
+        Venue: row["Venue"],
+        Weekday: row["Weekday / Month"],
+        Website: row["Website"],
+        WheelchairAccess: row["Wheelchair Access"],
+      }));
+    }
     return [];
   }, [data]);
+}
 
-  const columns = React.useMemo(() => {
+/**
+ * Custom hook to define the table columns.
+ *
+ * @param {Object} data - The data object containing header values, rows, and fetching status.
+ * @returns {Array} - The table columns definition.
+ */
+function useColumns(data) {
+  return useMemo(() => {
     if (!data.isFetching && data.headerValues != null) {
       return [
-        // Define your columns here
-        // You can add more columns if necessary
-        // Each column is an object with properties like Header, accessor, Cell, Filter etc.
-        // Header: The text shown in the column header
-        // accessor: The value representing the column
-        // Cell: A method to render the cell in the column
-        // Filter: A method to filter the data in the column
         {
           Header: "",
           accessor: "UpdateInfoFormLink",
           disableFilters: true,
-          Cell: ({ row }) => {
-            return (
-              <a href={row.original.UpdateInfoFormLink} target="_blank">
-                <BsPencilSquare />
-              </a>
-            );
-          },
+          Cell: ({ row }) => (
+            <a href={row.original.UpdateInfoFormLink} target="_blank">
+              <BsPencilSquare />
+            </a>
+          ),
         },
         {
           Header: "",
@@ -166,57 +181,45 @@ function TableAndMap() {
           minWidth: 20,
           width: 20,
           disableFilters: true,
-          Cell: ({ row }) => {
-            return (
-              <div>
-                <a
-                  href={row.original.Instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <BsInstagram />
-                </a>
-                <a
-                  href={row.original.FacebookPage}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <BsFacebook />
-                </a>
-                <a href={row.original.WhatsApp}>
-                  <BsWhatsapp />
-                </a>
-                <a
-                  href={row.original.GForm}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <BsGoogle />
-                </a>
-                <a
-                  href={
-                    row.original.Email === "" // if there is no email, then no link should be shown
-                      ? ""
-                      : row.original.Language === "Italian" // if the language is italian then the subject is different
-                      ? [
-                          "mailto:",
-                          row.original.Email,
-                          "?subject=Iscrizione%20open%20mic%20",
-                          row.original.Venue,
-                        ].join("")
-                      : [
-                          "mailto:",
-                          row.original.Email,
-                          "?subject=Sign%20up%20to%20open%20mic%20",
-                          row.original.Venue,
-                        ].join("")
-                  }
-                >
-                  <BsEnvelopeAt />
-                </a>
-              </div>
-            );
-          },
+          Cell: ({ row }) => (
+            <div>
+              <a
+                href={row.original.Instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <BsInstagram />
+              </a>
+              <a
+                href={row.original.FacebookPage}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <BsFacebook />
+              </a>
+              <a href={row.original.WhatsApp}>
+                <BsWhatsapp />
+              </a>
+              <a
+                href={row.original.GForm}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <BsGoogle />
+              </a>
+              <a
+                href={
+                  row.original.Email === ""
+                    ? ""
+                    : row.original.Language === "Italian" // Generates a different email link for Italian speakers
+                    ? `mailto:${row.original.Email}?subject=Iscrizione%20open%20mic%20${row.original.Venue}`
+                    : `mailto:${row.original.Email}?subject=Sign%20up%20to%20open%20mic%20${row.original.Venue}`
+                }
+              >
+                <BsEnvelopeAt />
+              </a>
+            </div>
+          ),
         },
         {
           Header: "Name",
@@ -224,7 +227,6 @@ function TableAndMap() {
           disableFilters: false,
           maxWidth: 300,
           minWidth: 300,
-          //width: 200,
           Cell: ({ cell: { value } }) => (
             <b>
               <i>{value}</i>
@@ -232,6 +234,7 @@ function TableAndMap() {
           ),
           Filter: SearchColumnFilter,
         },
+        // Add other column definitions here...
         {
           Header: "Description",
           accessor: "Description",
@@ -254,8 +257,6 @@ function TableAndMap() {
           Header: "Status",
           accessor: "Status",
           maxWidth: 600,
-          //minWidth: 250,
-          //width: 400,
           Filter: SelectColumnFilter,
           filter: "equals",
         },
@@ -286,7 +287,6 @@ function TableAndMap() {
           Header: "Frequency",
           accessor: "Frequency",
           Filter: SelectColumnFilter,
-          //hideInitially: true,
         },
         {
           Header: "Weekday",
@@ -339,33 +339,27 @@ function TableAndMap() {
           accessor: "FacebookGroup",
           hideInitially: true,
           disableFilters: true,
-          Cell: ({ row }) => {
-            return (
-              <a href={row.original.FacebookGroup}>
-                {row.original.FacebookGroup}
-              </a>
-            );
-          },
+          Cell: ({ row }) => (
+            <a href={row.original.FacebookGroup}>
+              {row.original.FacebookGroup}
+            </a>
+          ),
         },
       ];
     }
     return [];
   }, [data]);
+}
 
-  // Initial filter settings
-  const initialFilterSettings = React.useMemo(() => {
-    return [{ id: "BackOn", value: "Yes" }];
-  });
-
-  // Create an instance of the table
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-    allColumns,
-  } = useTable(
+/**
+ * Custom hook to create a table instance using React Table.
+ *
+ * @param {Array} columns - The columns definition.
+ * @param {Array} rowsData - The rows data.
+ * @returns {Object} - The table instance.
+ */
+function useTableInstance(columns, rowsData) {
+  return useTable(
     {
       columns,
       data: rowsData,
@@ -373,15 +367,28 @@ function TableAndMap() {
         hiddenColumns: columns
           .filter((c) => c.hideInitially)
           .map((c) => c.accessor),
-        filters: initialFilterSettings,
       },
     },
     useFilters
   );
+}
 
-  // line is zero-based
-  // line is the row number that you want to see into view after scroll
-  // Render the component
+/**
+ * Component to render the table and map.
+ *
+ * @param {Object} tableInstance - The table instance.
+ * @returns {JSX.Element} - The rendered component.
+ */
+function TableComponent({ tableInstance }) {
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+    allColumns,
+  } = tableInstance;
+
   return (
     <>
       <div className="columns is-multiline">
@@ -455,6 +462,20 @@ function TableAndMap() {
       </div>
     </>
   );
+}
+
+/**
+ * Main component to fetch data and render the table and map.
+ *
+ * @returns {JSX.Element} - The rendered component.
+ */
+function TableAndMap() {
+  const data = useFetchData(SpreadsheetId, ApiKey);
+  const rowsData = useRowsData(data);
+  const columns = useColumns(data);
+  const tableInstance = useTableInstance(columns, rowsData);
+
+  return <TableComponent tableInstance={tableInstance} />;
 }
 
 export default TableAndMap;
