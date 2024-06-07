@@ -2,8 +2,16 @@
 import React, { useState, useEffect } from "react";
 import GoogleMapReact from "google-map-react";
 import MapMarker from "./MapMarker";
+import mapStyles from "./MapStyles.js";
 // Import the API key from constants file
 const { ApiKey } = require("./constants");
+
+const options = {
+  styles: mapStyles, // Uncomment and provide map styles if needed
+  //disableDefaultUI: true,
+  // Disables default UI (e.g., satellite option)
+  //zoomControl: true,
+};
 
 // Define the Map component
 class Map extends React.Component {
@@ -81,6 +89,7 @@ class Map extends React.Component {
         <GoogleMapReact
           // Pass the API key to GoogleMapReact
           bootstrapURLKeys={{ key: ApiKey }}
+          options={options}
           // Set the default center and zoom level of the map
           defaultCenter={{ lat: 45.463336, lng: 9.187174 }}
           defaultZoom={12.8}

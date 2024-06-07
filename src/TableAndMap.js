@@ -111,6 +111,16 @@ function useFetchData(spreadsheetId, apiKey) {
   return data;
 }
 
+const reformatDataJSON = (data) => {
+  return data.rows.map((row) => {
+    let rowData = {};
+    data.headerValues.forEach((header) => {
+      rowData[header] = row[header];
+    });
+    return rowData;
+  });
+};
+
 /**
  * Custom hook to process the rows data.
  *

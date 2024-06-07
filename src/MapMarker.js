@@ -21,8 +21,8 @@ class MapMarker extends React.Component {
   render() {
     // Define the style for the marker
     const markerStyle = {
-      height: 20,
-      width: 20,
+      height: 23,
+      width: 23,
       zIndex: 10,
       cursor: "pointer",
     };
