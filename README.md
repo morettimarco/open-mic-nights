@@ -29,6 +29,17 @@ This project is a guide to finding free and paid comedy nights to perform at in 
 
 ## Installation
 
+This project runs on Node 16.20.2 therefore if you can't execute it perform
+   ```bash
+   nvm install v16
+   nvm use 16
+   ```
+
+then set up the environment variable 
+   ```bash
+   $env:NODE_OPTIONS="--openssl-legacy-provider"
+   ```
+
 To set up the project locally, follow these steps:
 
 1. **Clone the repository:**
