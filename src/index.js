@@ -4,6 +4,7 @@ import { createRoot } from "react-dom/client";
 import "./assets/styles.css";
 import TableAndMap from "./TableAndMap";
 import NavigationBar from "./NavigationBar";
+import { useTranslation } from "./i18n";
 
 // Constants for GitHub and Google Sheets URLs
 const GitHubURL = "https://github.com/morettimarco/open-mic-nights";
@@ -13,39 +14,49 @@ const SpreadsheetURL =
 
 // Main App component
 function App() {
-  // Array of Q&A objects to be displayed on the page
-  const qna = [
-    {
-      question: "Found a bug? Wanna contribute? Rip the site and f**k us?",
-      answer: (
-        <p>
-          Here's our <a href={GitHubURL}>Git repo</a>! Take a look at my code!
-        </p>
-      ),
-    },
-    {
-      question: "How can I view the raw data of app?",
-      answer: (
-        <p>
-          Head to the <a href={SpreadsheetURL}>Google Sheet.</a>
-        </p>
-      ),
-    },
-    {
-      question: "Credits",
-      answer: (
-        <p>
-          Many thanks to the original project{" "}
-          <a href="https://apuchitnis.github.io/open-mic-nights/">
-            London Standup Comedy Map
-          </a>{" "}
-          and to the awesome{" "}
-          <a href="https://apuchitnis.github.io/"> Apu Chitnis</a> for sharing
-          it.
-        </p>
-      ),
-    },
-  ];
+  const { t } = useTranslation();
+  
+  // Process Q&A objects with translations and URLs
+  const qna = t.qna.map((qa, index) => {
+    // Add appropriate URLs and formatting based on the question index
+    let answer;
+    switch(index) {
+      case 0:
+        answer = (
+          <p>
+            {qa.answer.split('Git repo!')[0]} <a href={GitHubURL}>Git repo</a>! {qa.answer.split('Git repo!')[1]}
+          </p>
+        );
+        break;
+      case 1:
+        answer = (
+          <p>
+            {qa.answer.split('Google Sheet')[0]} <a href={SpreadsheetURL}>Google Sheet</a>.
+          </p>
+        );
+        break;
+      case 2:
+        answer = (
+          <p>
+            {qa.answer.split('London Standup Comedy Map')[0]}{" "}
+            <a href="https://apuchitnis.github.io/open-mic-nights/">
+              London Standup Comedy Map
+            </a>{" "}
+            {qa.answer.split('London Standup Comedy Map')[1].split('Apu Chitnis')[0]}{" "}
+            <a href="https://apuchitnis.github.io/">Apu Chitnis</a>{" "}
+            {qa.answer.split('Apu Chitnis')[1]}
+          </p>
+        );
+        break;
+      default:
+        answer = <p>{qa.answer}</p>;
+    }
+    
+    return {
+      question: qa.question,
+      answer: answer,
+    };
+  });
 
   // Render the NavigationBar, TableAndMap, and Q&A sections
   return (
