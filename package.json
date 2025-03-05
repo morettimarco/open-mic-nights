@@ -1,11 +1,10 @@
 {
   "name": "open-mic-nights",
   "version": "1.0.0",
-  "resolutions": {
-    "react-error-overlay": "6.0.9"
+  "engines": {
+    "node": ">=18.0.0"
   },
   "scripts": {
-    "preinstall": "npx npm-force-resolutions",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -16,23 +15,22 @@
   "homepage": "https://www.openmicmilano.com/",
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "*",
-    "eslint-plugin-react-hooks": "^4.2.0",
-    "gh-pages": "^2.2.0",
-    "react-error-overlay": "6.0.9"
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "gh-pages": "^6.1.1"
   },
   "dependencies": {
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^11.2.7",
-    "@testing-library/user-event": "^12.1.10",
-    "async": "^3.2.0",
-    "google-map-react": "^1.1.7",
-    "google-spreadsheet": "^3.0.0",
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0",
-    "react-icons": "^4.10.1",
-    "react-scripts": "^4.0.3",
-    "react-table": "^7.7.0",
-    "web-vitals": "^1.1.2"
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "async": "^3.2.4",
+    "google-map-react": "^2.2.0",
+    "google-spreadsheet": "^4.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-icons": "^4.8.0",
+    "react-scripts": "5.0.1",
+    "react-table": "^7.8.0",
+    "web-vitals": "^2.1.4"
   },
   "esLintConfig": {
     "extends": [

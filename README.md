@@ -1,8 +1,8 @@
-# Milan comedy standup nights
+# Milan comedy stand-up nights
 
 Find free and paid comedy nights to perform at in Milano 🎙
 
-# Milan Standup Comedy Map 🎤🗺️
+# Milan Stand-up Comedy Map 🎤🗺️
 
 This project is a guide to finding free and paid comedy nights to perform at in Milan. It's a fork of the [apuchitnis/open-mic-nights](https://github.com/apuchitnis/open-mic-nights) project.
 
@@ -42,20 +42,34 @@ then set up the environment variable
 
 To set up the project locally, follow these steps:
 
-1. **Clone the repository:**
+1. **Requirements:**
+   - Node.js >= 18.0.0
+   - npm >= 9.0.0
+
+2. **Clone the repository:**
 
    ```bash
    git clone https://github.com/morettimarco/open-mic-nights.git
    cd open-mic-nights
    ```
 
-2. **Install dependencies:**
+3. **Use the correct Node.js version with NVM:**
+
+   ```bash
+   # Install NVM if not already installed
+   # curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+   
+   # Use the project's Node.js version
+   nvm use
+   ```
+
+4. **Install dependencies:**
 
    ```bash
    npm install
    ```
 
-3. **Add your Google Maps API Key:**
+5. **Add your Google Maps API Key:**
 
    - Create a file named `constants.js` in the `src` directory.
    - Add the following code, replacing `YOUR_GOOGLE_MAPS_API_KEY` with your actual API key:
@@ -65,7 +79,7 @@ To set up the project locally, follow these steps:
    exports.ApiKey = ApiKey;
    ```
 
-4. **Start the development server:**
+6. **Start the development server:**
 
    ```bash
    npm start

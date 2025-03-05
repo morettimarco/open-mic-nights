@@ -2,53 +2,52 @@
 import React, { useState, useEffect } from "react";
 import { PiMicrophoneStageFill } from "react-icons/pi";
 
-// MapMarker Component
-class MapMarker extends React.Component {
-  // Constructor for the MapMarker component
-  constructor(props) {
-    super(props);
-    // Initialize the state with the show prop
-    this.state = { show: props.show };
-  }
+// MapMarker Component - converted to functional component for React 18
+const MapMarker = (props) => {
+  // Initialize state with the show prop
+  const [show, setShow] = useState(props.show);
+
+  // Effect to update show state when props.show changes
+  useEffect(() => {
+    setShow(props.show);
+  }, [props.show]);
 
   // Method to handle close events
-  handleClose = () => {
+  const handleClose = () => {
     // Set the show state to false
-    this.setState({ show: false });
+    setShow(false);
   };
 
-  // Render the MapMarker component
-  render() {
-    // Define the style for the marker
-    const markerStyle = {
-      height: 23,
-      width: 23,
-      zIndex: 10,
-      cursor: "pointer",
-    };
-    return (
-      <div>
-        {/* Render the microphone icon */}
-        <PiMicrophoneStageFill
-          style={markerStyle}
-          // Set the class based on the status prop
-          className={this.props.status === "Active" ? "is-link" : "is-danger"}
-          // Handle click events on the icon
-          onClick={() => this.setState({ show: !this.state.show })}
+  // Define the style for the marker
+  const markerStyle = {
+    height: 23,
+    width: 23,
+    zIndex: 10,
+    cursor: "pointer",
+  };
+
+  return (
+    <div>
+      {/* Render the microphone icon */}
+      <PiMicrophoneStageFill
+        style={markerStyle}
+        // Set the class based on the status prop
+        className={props.status === "Active" ? "is-link" : "is-danger"}
+        // Handle click events on the icon
+        onClick={() => setShow(!show)}
+      />
+      {/* Render the InfoWindow component if the show state is true */}
+      {show && (
+        <InfoWindow
+          name={props.name}
+          address={props.address}
+          weekday={props.weekday}
+          status={props.status}
+          onClose={handleClose}
         />
-        {/* Render the InfoWindow component if the show state is true */}
-        {this.state.show && (
-          <InfoWindow
-            name={this.props.name}
-            address={this.props.address}
-            weekday={this.props.weekday}
-            status={this.props.status}
-            onClose={this.handleClose}
-          />
-        )}
-      </div>
-    );
-  }
+      )}
+    </div>
+  );
 }
 
 // InfoWindow component

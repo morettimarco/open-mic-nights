@@ -1,6 +1,6 @@
 // Importing necessary modules from react, react-dom and local files
-import React, { useState, useEffect } from "react";
-import ReactDOM from "react-dom";
+import React from "react";
+import { createRoot } from "react-dom/client";
 import "./assets/styles.css";
 import TableAndMap from "./TableAndMap";
 import NavigationBar from "./NavigationBar";
@@ -80,5 +80,9 @@ function App() {
 
 // Get the root element from the HTML
 const rootElement = document.getElementById("app");
-// Render the App component into the root element
-ReactDOM.render(<App />, rootElement);
+// Console warnings are now handled in CustomGoogleMap.js
+
+// Create a root using createRoot API (React 18)
+const root = createRoot(rootElement);
+// Render the App component
+root.render(<App />);
