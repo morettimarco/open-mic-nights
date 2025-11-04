@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/static/css/main.f1aba6ea.css",
-    "main.js": "/static/js/main.226e9731.js",
+    "main.css": "/static/css/main.1ac2cbbd.css",
+    "main.js": "/static/js/main.a4b0db4e.js",
     "static/media/milano-2.png": "/static/media/milano-2.80d62e66f25898241a6c.png",
     "index.html": "/index.html",
-    "main.f1aba6ea.css.map": "/static/css/main.f1aba6ea.css.map",
-    "main.226e9731.js.map": "/static/js/main.226e9731.js.map"
+    "main.1ac2cbbd.css.map": "/static/css/main.1ac2cbbd.css.map",
+    "main.a4b0db4e.js.map": "/static/js/main.a4b0db4e.js.map"
   },
   "entrypoints": [
-    "static/css/main.f1aba6ea.css",
-    "static/js/main.226e9731.js"
+    "static/css/main.1ac2cbbd.css",
+    "static/js/main.a4b0db4e.js"
   ]
 }
