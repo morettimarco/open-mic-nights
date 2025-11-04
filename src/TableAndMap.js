@@ -13,7 +13,6 @@ import Map from "./Map";
 import { GoogleSpreadsheet } from "google-spreadsheet";
 import { ApiKey } from "./constants";
 import { mockHeaderRow, createMockRows, debugMockData } from "./mockData";
-import { useTranslation } from "./i18n";
 
 // Spreadsheet ID
 // If the original spreadsheet ID doesn't work, you may need to:
@@ -26,9 +25,6 @@ const SpreadsheetId = "1_X_znvg8kGbFMXoys011182T5ZTGONCsveY9uLEWsr8";
 function SelectColumnFilter({
   column: { filterValue, setFilter, preFilteredRows, id },
 }) {
-  // Get translations
-  const { t } = useTranslation();
-
   // Calculate the options for filtering using the preFilteredRows
   const options = React.useMemo(() => {
     const options = new Set();
@@ -47,7 +43,7 @@ function SelectColumnFilter({
         setFilter(e.target.value || undefined);
       }}
     >
-      <option value="">{t.table.allOption}</option>
+      <option value="">All</option>
       {options.map((option, i) => (
         <option key={i} value={option}>
           {option}
@@ -285,7 +281,12 @@ function useRowsData(data) {
               return null;
             }
           })
-          .filter(Boolean); // Remove any null entries
+          .filter(Boolean) // Remove any null entries
+          .filter((row) => {
+            // Only keep rows with status "active" or "inactive" (case-insensitive)
+            const status = (row.Status || "").toLowerCase().trim();
+            return status === "active" || status === "inactive";
+          });
 
         return processedRows;
       } catch (e) {
@@ -303,9 +304,6 @@ function useRowsData(data) {
  * @returns {Array} - The table columns definition.
  */
 function useColumns(data) {
-  // Get translations
-  const { t } = useTranslation();
-  
   return useMemo(() => {
     if (!data.isFetching && data.headerValues != null) {
       return [
@@ -367,7 +365,7 @@ function useColumns(data) {
           ),
         },
         {
-          Header: t.columnNames.name,
+          Header: "Name",
           accessor: "Name",
           disableFilters: false,
           maxWidth: 300,
@@ -381,70 +379,70 @@ function useColumns(data) {
         },
         // Add other column definitions here...
         {
-          Header: t.columnNames.description,
+          Header: "Description",
           accessor: "Description",
           hideInitially: true,
           Filter: SearchColumnFilter,
         },
         {
-          Header: t.columnNames.category,
+          Header: "Category",
           accessor: "Category",
           hideInitially: true,
           Filter: SearchColumnFilter,
         },
         {
-          Header: t.columnNames.subCategory,
+          Header: "Sub Category",
           accessor: "SubCategory",
           hideInitially: true,
           Filter: SearchColumnFilter,
         },
         {
-          Header: t.columnNames.status,
+          Header: "Status",
           accessor: "Status",
           maxWidth: 600,
           Filter: SelectColumnFilter,
           filter: "equals",
         },
         {
-          Header: t.columnNames.organizerName,
+          Header: "Organizer Name",
           accessor: "OrganizerName",
           hideInitially: true,
           Filter: SearchColumnFilter,
         },
         {
-          Header: t.columnNames.audienceEntryFee,
+          Header: "Audience Entry Fee",
           accessor: "AudienceEntryFee",
           hideInitially: true,
           Filter: SelectColumnFilter,
         },
         {
-          Header: t.columnNames.level,
+          Header: "Level",
           accessor: "Level",
           Filter: SelectColumnFilter,
           filter: "equals",
         },
         {
-          Header: t.columnNames.language,
+          Header: "Language",
           accessor: "Language",
           Filter: SelectColumnFilter,
         },
         {
-          Header: t.columnNames.frequency,
+          Header: "Frequency",
           accessor: "Frequency",
           Filter: SelectColumnFilter,
         },
         {
-          Header: t.columnNames.weekday,
+          Header: "Weekday",
           accessor: "Weekday",
           Filter: SelectColumnFilter,
         },
         {
-          Header: t.columnNames.time,
+          Header: "Time",
           accessor: "Time",
           Filter: SearchColumnFilter,
         },
         {
-          Header: t.columnNames.venue,
+          Header: "Venue",
           accessor: "Venue",
           maxWidth: 600,
           minWidth: 200,
@@ -459,7 +457,7 @@ function useColumns(data) {
           disableFilters: true,
         },
         {
-          Header: t.columnNames.address,
+          Header: "Address",
           accessor: "Address",
           maxWidth: 600,
           minWidth: 300,
@@ -468,19 +466,19 @@ function useColumns(data) {
           disableFilters: true,
         },
         {
-          Header: t.columnNames.wheelchairAccess,
+          Header: "Wheelchair Access",
           accessor: "WheelchairAccess",
           hideInitially: true,
           Filter: SelectColumnFilter,
         },
         {
-          Header: t.columnNames.howToBook,
+          Header: "How To Book",
           accessor: "HowToBook",
           Filter: SearchColumnFilter,
           disableFilters: true,
         },
         {
-          Header: t.columnNames.facebookGroup,
+          Header: "Facebook Group",
           accessor: "FacebookGroup",
           hideInitially: true,
           disableFilters: true,
@@ -563,9 +561,6 @@ function useTableInstance(columns, rowsData, currentData) {
  * @returns {JSX.Element} - The rendered component.
  */
 function TableComponent({ tableInstance, onRowClick, selectedRowNumber }) {
-  // Get translations
-  const { t } = useTranslation();
-  
   const {
     getTableProps,
     getTableBodyProps,
@@ -591,9 +586,9 @@ function TableComponent({ tableInstance, onRowClick, selectedRowNumber }) {
             <i className="fas fa-spinner fa-pulse"></i>
           </span>
         </div>
-        <p>{t.table.loading}</p>
+        <p>Loading open mic events...</p>
         <p style={{ marginTop: "10px", fontSize: "0.8em", color: "#666" }}>
-          {t.table.loadingDetails}
+          Fetching data from Google Sheets. If this message persists for more than 30 seconds, there may be an issue with the data connection.
         </p>
         <button
           onClick={() => window.location.reload()}
@@ -607,7 +602,7 @@ function TableComponent({ tableInstance, onRowClick, selectedRowNumber }) {
             cursor: "pointer",
           }}
         >
-          {t.table.reload}
+          Reload Page
         </button>
       </div>
     );
@@ -667,7 +662,7 @@ function TableComponent({ tableInstance, onRowClick, selectedRowNumber }) {
                   }
                 }}
               >
-                {t.table.selectColumns}
+                Select columns 🔽
               </button>
             </div>
             <div className="dropdown-menu" id="dropdown-menu" role="menu">
@@ -732,7 +727,7 @@ function TableComponent({ tableInstance, onRowClick, selectedRowNumber }) {
                     padding: "20px",
                     color: "#666"
                   }}>
-                    {t.table.noResults}
+                    No events match your current filters
                   </td>
                 </tr>
               ) : (

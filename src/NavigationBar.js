@@ -2,16 +2,12 @@
 import React, { useEffect } from "react";
 import logo from "./assets/milano-2.png";
 import { BsCaretDownSquareFill } from "react-icons/bs";
-import LanguageSwitcher from "./LanguageSwitcher";
-import { useTranslation } from "./i18n";
 
 // Define the URL for the Google Form
 const GoogleForm = "https://forms.gle/vDuLfQ7Bc9iKxT2o8";
 
 // Define the NavigationBar component
 function NavigationBar() {
-  // Get translations
-  const { t } = useTranslation();
   // Set up modal functionality with React hooks
   useEffect(() => {
     // Functions to open and close modals
@@ -91,10 +87,10 @@ function NavigationBar() {
           <div className="navbar-item">
             <div className="title-subtitle-container">
               <p className="title" style={{ fontSize: "1.75rem" }}>
-                {t.navigation.title}
+                Milan Stand-up Comedy Map
               </p>
               <p className="subtitle" style={{ fontSize: "0.875rem" }}>
-                {t.navigation.subtitle}
+                Perform comedy near you
               </p>
             </div>
           </div>
@@ -111,13 +107,8 @@ function NavigationBar() {
       </div>
       <div className="navbar-menu" id="nav-links">
         <div className="navbar-end">
-          {/* Language Switcher */}
-          <div className="navbar-item">
-            <LanguageSwitcher />
-          </div>
-          
           <a className="navbar-item navbar-item-centered" href={GoogleForm}>
-            {t.navigation.submitEvent}
+            🎤 Submit an open mic night
           </a>
           <a
             className="js-modal-trigger navbar-item navbar-item-centered"
@@ -125,13 +116,13 @@ function NavigationBar() {
             onClick={handleFaqClick}
             style={{ cursor: "pointer" }}
           >
-            {t.navigation.faq}
+            ❓ F.A.Q.
           </a>
           <a
             className="navbar-item navbar-item-centered"
             href="https://www.instagram.com/_anarchytect/"
           >
-            {t.navigation.contact}
+            📣 Contact me for feedback!
           </a>
         </div>
       </div>

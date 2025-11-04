@@ -1,7 +1,6 @@
 // Import necessary modules and components
 import React, { useState, useEffect } from "react";
 import { PiMicrophoneStageFill } from "react-icons/pi";
-import { useTranslation } from "./i18n";
 
 // MapMarker Component - converted to functional component for React 18
 const MapMarker = (props) => {
@@ -53,9 +52,6 @@ const MapMarker = (props) => {
 
 // InfoWindow component
 const InfoWindow = (props) => {
-  // Get translations
-  const { t } = useTranslation();
-  
   // Destructure the props
   const { name, address, weekday, status, onClose } = props;
   // Define the style for the info window
@@ -101,7 +97,7 @@ const InfoWindow = (props) => {
         {weekday} at {address}
       </div>
       {/* Render the status if it's inactive */}
-      {status === "Inactive" && <div style={inactiveStyle}>{t.map.inactive}</div>}
+      {status === "Inactive" && <div style={inactiveStyle}>Inactive</div>}
     </div>
   );
 };
