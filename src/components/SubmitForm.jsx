@@ -111,7 +111,7 @@ export default function SubmitForm({ open, onClose, availableCategories = [] }) 
             <Field label="Category" error={errors.Category}>
               <Select {...register("Category")}>
                 <option value="">Select…</option>
-                {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+                {availableCategories.map((c) => <option key={c} value={c}>{c}</option>)}
               </Select>
             </Field>
             <Field label="Language" error={errors.Language}>
