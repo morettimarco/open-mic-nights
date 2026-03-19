@@ -1,0 +1,21 @@
+{
+  "name": "Open Mic Milano",
+  "short_name": "OpenMicMI",
+  "description": "Find open mic nights in Milan",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#f97316",
+  "icons": [
+    {
+      "src": "/milano-2.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/milano-2.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
