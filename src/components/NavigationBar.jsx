@@ -14,10 +14,13 @@ export default function NavigationBar({ onSubmitClick }) {
           {/* Logo + Title */}
           <div className="flex items-center gap-3">
             <img src="/milano-2.png" alt="Open Mic Milano" className="h-9 w-auto dark:drop-shadow-[0_0_6px_rgba(255,255,255,0.95)]" />
-            <span className="font-bold text-lg">
-              <span className="text-slate-900 dark:text-white dark:drop-shadow-[0_0_6px_rgba(255,255,255,0.9)]">Open Mic </span>
-              <span className="text-brand-500">Milano</span>
-            </span>
+            <div className="flex flex-col leading-tight">
+              <span className="font-bold text-lg">
+                <span className="text-slate-900 dark:text-white dark:drop-shadow-[0_0_6px_rgba(255,255,255,0.9)]">Open Mic </span>
+                <span className="text-brand-500">Milano</span>
+              </span>
+              <span className="text-xs font-light text-slate-900 dark:text-white">Perform comedy near you</span>
+            </div>
           </div>
 
           {/* Desktop nav */}
