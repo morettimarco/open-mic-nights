@@ -10,7 +10,7 @@ import { Select } from "./ui/select";
 import { Textarea } from "./ui/textarea";
 import { useSubmitEvent } from "../hooks/useSubmitEvent";
 import { toast } from "sonner";
-import { CATEGORIES, WEEKDAYS, FREQUENCIES, LANGUAGES, LEVELS } from "../constants";
+import { WEEKDAYS, FREQUENCIES, LANGUAGES, LEVELS } from "../constants";
 import { Loader2 } from "lucide-react";
 
 const schema = z.object({
@@ -44,7 +44,7 @@ function Field({ label, error, children }) {
   );
 }
 
-export default function SubmitForm({ open, onClose }) {
+export default function SubmitForm({ open, onClose, availableCategories = [] }) {
   const { submitEvent, submitting } = useSubmitEvent();
   const {
     register,

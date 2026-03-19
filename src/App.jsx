@@ -19,20 +19,26 @@ export default function App() {
     days: new Set(),
     categories: new Set(),
     languages: new Set(),
-    statuses: new Set(),
+    showInactive: false,
   });
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [detailOpen, setDetailOpen] = useState(false);
   const [submitOpen, setSubmitOpen] = useState(false);
 
+  // Derive sorted unique categories from actual data
+  const availableCategories = useMemo(() => {
+    const cats = new Set(events.map((e) => e.Category).filter(Boolean));
+    return [...cats].sort();
+  }, [events]);
+
   const filtered = useMemo(() => {
     return events.filter((e) => {
+      if (!filters.showInactive && e.Status !== "Active") return false;
       const s = filters.search.toLowerCase();
       if (s && !`${e.Name} ${e.Venue} ${e.Address}`.toLowerCase().includes(s)) return false;
       if (filters.days.size && !filters.days.has(e.Weekday)) return false;
       if (filters.categories.size && !filters.categories.has(e.Category)) return false;
       if (filters.languages.size && !filters.languages.has(e.Language)) return false;
-      if (filters.statuses.size && !filters.statuses.has(e.Status)) return false;
       return true;
     });
   }, [events, filters]);
@@ -51,7 +57,7 @@ export default function App() {
 
       {/* Sticky: Filters + Map panel */}
       <div className="flex-shrink-0 bg-slate-50 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 px-4 sm:px-6 lg:px-8 pt-4 pb-3 space-y-3">
-        <FilterBar filters={filters} onChange={setFilters} resultCount={filtered.length} />
+        <FilterBar filters={filters} onChange={setFilters} availableCategories={availableCategories} />
         <MapView events={filtered} onMarkerClick={openDetail} />
       </div>
 
@@ -80,7 +86,7 @@ export default function App() {
         isFavorite={selectedEvent ? favorites.has(selectedEvent.Name) : false}
         onToggleFavorite={toggleFavorite}
       />
-      <SubmitForm open={submitOpen} onClose={() => setSubmitOpen(false)} />
+      <SubmitForm open={submitOpen} onClose={() => setSubmitOpen(false)} availableCategories={availableCategories} />
     </div>
   );
 }

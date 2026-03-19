@@ -5,9 +5,7 @@ import { Button } from "./ui/button";
 import { cn } from "../lib/utils";
 
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-const CATEGORIES = ["Stand-up Comedy", "Music", "Poetry / Spoken Word", "Mixed / Various", "Storytelling", "Improv", "Other"];
 const LANGUAGES = ["English", "Italian", "Bilingual"];
-const STATUSES = ["Active", "Inactive"];
 
 function Chip({ label, active, onClick }) {
   return (
@@ -25,8 +23,26 @@ function Chip({ label, active, onClick }) {
   );
 }
 
-export default function FilterBar({ filters, onChange, resultCount }) {
-  const { search, days, categories, languages, statuses } = filters;
+function Toggle({ checked, onChange, label }) {
+  return (
+    <label className="inline-flex items-center gap-2 cursor-pointer select-none">
+      <div className="relative w-9 h-5">
+        <input
+          type="checkbox"
+          className="sr-only peer"
+          checked={checked}
+          onChange={(e) => onChange(e.target.checked)}
+        />
+        <div className="absolute inset-0 rounded-full bg-slate-200 dark:bg-slate-700 peer-checked:bg-brand-500 transition-colors" />
+        <div className="absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform peer-checked:translate-x-4" />
+      </div>
+      <span className="text-xs text-slate-600 dark:text-slate-400 whitespace-nowrap">{label}</span>
+    </label>
+  );
+}
+
+export default function FilterBar({ filters, onChange, availableCategories = [] }) {
+  const { search, days, categories, languages, showInactive } = filters;
 
   function toggleFilter(key, value) {
     onChange((prev) => {
@@ -38,10 +54,10 @@ export default function FilterBar({ filters, onChange, resultCount }) {
   }
 
   function clearAll() {
-    onChange({ search: "", days: new Set(), categories: new Set(), languages: new Set(), statuses: new Set() });
+    onChange({ search: "", days: new Set(), categories: new Set(), languages: new Set(), showInactive: false });
   }
 
-  const hasFilters = !!(search || days.size || categories.size || languages.size || statuses.size);
+  const hasFilters = !!(search || days.size || categories.size || languages.size || showInactive);
 
   return (
     <div className="space-y-3">
@@ -72,17 +88,21 @@ export default function FilterBar({ filters, onChange, resultCount }) {
             <Chip key={d} label={d} active={days.has(d)} onClick={() => toggleFilter("days", d)} />
           ))}
         </div>
-        {/* Categories */}
-        <div className="filter-chips flex gap-2 pb-1">
-          {CATEGORIES.map((c) => (
+        {/* Categories + Languages + Show Inactive toggle */}
+        <div className="filter-chips flex gap-2 pb-1 items-center">
+          {availableCategories.map((c) => (
             <Chip key={c} label={c} active={categories.has(c)} onClick={() => toggleFilter("categories", c)} />
-          ))}
-          {STATUSES.map((s) => (
-            <Chip key={s} label={s} active={statuses.has(s)} onClick={() => toggleFilter("statuses", s)} />
           ))}
           {LANGUAGES.map((l) => (
             <Chip key={l} label={l} active={languages.has(l)} onClick={() => toggleFilter("languages", l)} />
           ))}
+          <div className="ml-2 border-l border-slate-200 dark:border-slate-700 pl-3">
+            <Toggle
+              checked={showInactive}
+              onChange={(val) => onChange((prev) => ({ ...prev, showInactive: val }))}
+              label="Show inactive"
+            />
+          </div>
         </div>
       </div>
 
