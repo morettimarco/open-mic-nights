@@ -19,7 +19,7 @@ export default function NavigationBar({ onSubmitClick }) {
                 <span className="text-slate-900 dark:text-white dark:drop-shadow-[0_0_6px_rgba(255,255,255,0.9)]">Open Mic </span>
                 <span className="text-brand-500">Milano</span>
               </span>
-              <span className="text-xs font-light text-slate-900 dark:text-white">Perform comedy near you</span>
+              <span className="text-xs font-light text-slate-900 dark:text-white">Milano's stand up comedy map</span>
             </div>
           </div>
 
