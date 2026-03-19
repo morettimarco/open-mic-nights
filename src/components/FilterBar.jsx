@@ -57,7 +57,7 @@ export default function FilterBar({ filters, onChange, availableCategories = [] 
     onChange({ search: "", days: new Set(), categories: new Set(), languages: new Set(), showInactive: false });
   }
 
-  const hasFilters = !!(search || days.size || categories.size || languages.size || showInactive);
+  const hasFilters = !!(search || days.size || categories.size || languages.size);
 
   return (
     <div className="space-y-3">
