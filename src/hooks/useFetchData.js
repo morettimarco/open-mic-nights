@@ -46,11 +46,22 @@ function reformatRow(values, colMap) {
 }
 
 // Fetch via the raw Sheets REST API — no library, no duplicate-header issues.
+// Reads the spreadsheet metadata first to get the real first-sheet title,
+// so the code works regardless of whether the tab is named "Sheet1", "Foglio1", etc.
 async function fetchSheet(spreadsheetId, apiKey) {
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/Sheet1?key=${apiKey}`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`Sheets API error ${res.status}`);
-  const json = await res.json();
+  const base = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}`;
+
+  // Step 1: get the actual tab name
+  const metaRes = await fetch(`${base}?key=${apiKey}&fields=sheets.properties.title`);
+  if (!metaRes.ok) throw new Error(`Sheets metadata error ${metaRes.status}`);
+  const meta = await metaRes.json();
+  const sheetTitle = meta.sheets?.[0]?.properties?.title;
+  if (!sheetTitle) throw new Error("Could not determine sheet name");
+
+  // Step 2: fetch values using the real tab name
+  const valRes = await fetch(`${base}/values/${encodeURIComponent(sheetTitle)}?key=${apiKey}`);
+  if (!valRes.ok) throw new Error(`Sheets API error ${valRes.status}`);
+  const json = await valRes.json();
   const [headerRow, ...dataRows] = json.values || [];
   const colMap = buildColumnMap(headerRow);
   return dataRows

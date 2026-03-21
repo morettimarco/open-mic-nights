@@ -29,10 +29,10 @@ export default function MapView({ events, onMarkerClick }) {
         streetViewControl={false}
         fullscreenControl={false}
       >
-        {events.filter(e => e.Latitude && e.Longitude).map((event) => (
+        {events.filter(e => parseFloat(e.Latitude) && parseFloat(e.Longitude)).map((event) => (
           <AdvancedMarker
             key={markerKey(event)}
-            position={{ lat: event.Latitude, lng: event.Longitude }}
+            position={{ lat: parseFloat(event.Latitude), lng: parseFloat(event.Longitude) }}
             onClick={() => handleMarkerClick(event)}
           >
             <div className={[
