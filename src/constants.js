@@ -5,16 +5,6 @@ export const GOOGLE_MAPS_API_KEY = API_KEY;
 
 export const MILAN_CENTER = { lat: 45.4654, lng: 9.1859 };
 
-export const CATEGORIES = [
-  "Stand-up Comedy",
-  "Music",
-  "Poetry / Spoken Word",
-  "Mixed / Various",
-  "Storytelling",
-  "Improv",
-  "Other",
-];
-
 export const WEEKDAYS = [
   "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday",
   "Varies", "Monthly",

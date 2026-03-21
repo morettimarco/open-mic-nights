@@ -1,11 +1,3 @@
-export const mockHeaderRow = [
-  "Name", "Address", "Audience Entry Fee", "Contact / Book a Spot",
-  "Language", "Event Category", "Event Sub-Category", "Status",
-  "Organizer Name", "Event Description", "Facebook Group", "Facebook Page",
-  "WhatsApp", "Google Form", "Email", "Frequency", "Instagram", "Latitude",
-  "Comedian Level", "Longitude", "Event Time", "Update Info Form Link",
-  "Venue", "Weekday / Month", "Website", "Wheelchair Access"
-];
 
 export const mockRows = [
   {
