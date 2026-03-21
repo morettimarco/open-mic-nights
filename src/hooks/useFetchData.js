@@ -1,20 +1,13 @@
 import { useState, useEffect } from "react";
+import { GoogleSpreadsheet } from "google-spreadsheet";
 import { API_KEY, SPREADSHEET_ID } from "../constants";
 import { mockRows } from "../mockData";
 
-// Maps the first occurrence of each column name to its index.
-// Duplicate headers are silently ignored (first one wins).
-function buildColumnMap(headers) {
-  const map = {};
-  headers.forEach((h, i) => {
-    const name = (h || "").trim();
-    if (name && !(name in map)) map[name] = i;
-  });
-  return map;
-}
-
-function reformatRow(values, colMap) {
-  const get = (key) => (values[colMap[key]] || "").trim();
+function reformatRow(row) {
+  const get = (key) => {
+    if (row.get) return row.get(key) || "";
+    return row[key] || "";
+  };
   return {
     Name: get("Name"),
     Venue: get("Venue"),
@@ -45,30 +38,6 @@ function reformatRow(values, colMap) {
   };
 }
 
-// Fetch via the raw Sheets REST API — no library, no duplicate-header issues.
-// Reads the spreadsheet metadata first to get the real first-sheet title,
-// so the code works regardless of whether the tab is named "Sheet1", "Foglio1", etc.
-async function fetchSheet(spreadsheetId, apiKey) {
-  const base = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}`;
-
-  // Step 1: get the actual tab name
-  const metaRes = await fetch(`${base}?key=${apiKey}&fields=sheets.properties.title`);
-  if (!metaRes.ok) throw new Error(`Sheets metadata error ${metaRes.status}`);
-  const meta = await metaRes.json();
-  const sheetTitle = meta.sheets?.[0]?.properties?.title;
-  if (!sheetTitle) throw new Error("Could not determine sheet name");
-
-  // Step 2: fetch values using the real tab name
-  const valRes = await fetch(`${base}/values/${encodeURIComponent(sheetTitle)}?key=${apiKey}`);
-  if (!valRes.ok) throw new Error(`Sheets API error ${valRes.status}`);
-  const json = await valRes.json();
-  const [headerRow, ...dataRows] = json.values || [];
-  const colMap = buildColumnMap(headerRow);
-  return dataRows
-    .map((row) => reformatRow(row, colMap))
-    .filter((r) => r.Status === "Active" || r.Status === "Inactive");
-}
-
 export function useFetchData() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -77,13 +46,19 @@ export function useFetchData() {
   useEffect(() => {
     async function load() {
       try {
-        const formatted = await fetchSheet(SPREADSHEET_ID, API_KEY);
+        const doc = new GoogleSpreadsheet(SPREADSHEET_ID, { apiKey: API_KEY });
+        await doc.loadInfo();
+        const sheet = doc.sheetsByIndex[0];
+        await sheet.loadHeaderRow();
+        const rows = await sheet.getRows();
+        const formatted = rows.map(reformatRow).filter(
+          (r) => r.Status === "Active" || r.Status === "Inactive"
+        );
         setEvents(formatted);
       } catch (err) {
         console.warn("Google Sheets fetch failed, using mock data:", err);
         setError(err);
-        // mockRows are already plain objects matching the reformatRow output shape
-        setEvents(mockRows);
+        setEvents(mockRows.map(reformatRow));
       } finally {
         setLoading(false);
       }
