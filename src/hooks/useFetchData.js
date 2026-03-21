@@ -1,13 +1,20 @@
 import { useState, useEffect } from "react";
-import { GoogleSpreadsheet } from "google-spreadsheet";
 import { API_KEY, SPREADSHEET_ID } from "../constants";
 import { mockRows } from "../mockData";
 
-function reformatRow(row) {
-  const get = (key) => {
-    if (row.get) return row.get(key) || "";
-    return row[key] || "";
-  };
+// Maps the first occurrence of each column name to its index.
+// Duplicate headers are silently ignored (first one wins).
+function buildColumnMap(headers) {
+  const map = {};
+  headers.forEach((h, i) => {
+    const name = (h || "").trim();
+    if (name && !(name in map)) map[name] = i;
+  });
+  return map;
+}
+
+function reformatRow(values, colMap) {
+  const get = (key) => (values[colMap[key]] || "").trim();
   return {
     Name: get("Name"),
     Venue: get("Venue"),
@@ -38,6 +45,19 @@ function reformatRow(row) {
   };
 }
 
+// Fetch via the raw Sheets REST API — no library, no duplicate-header issues.
+async function fetchSheet(spreadsheetId, apiKey) {
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/Sheet1?key=${apiKey}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Sheets API error ${res.status}`);
+  const json = await res.json();
+  const [headerRow, ...dataRows] = json.values || [];
+  const colMap = buildColumnMap(headerRow);
+  return dataRows
+    .map((row) => reformatRow(row, colMap))
+    .filter((r) => r.Status === "Active" || r.Status === "Inactive");
+}
+
 export function useFetchData() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -46,19 +66,13 @@ export function useFetchData() {
   useEffect(() => {
     async function load() {
       try {
-        const doc = new GoogleSpreadsheet(SPREADSHEET_ID, { apiKey: API_KEY });
-        await doc.loadInfo();
-        const sheet = doc.sheetsByIndex[0];
-        await sheet.loadHeaderRow();
-        const rows = await sheet.getRows();
-        const formatted = rows.map(reformatRow).filter(
-          (r) => r.Status === "Active" || r.Status === "Inactive"
-        );
+        const formatted = await fetchSheet(SPREADSHEET_ID, API_KEY);
         setEvents(formatted);
       } catch (err) {
         console.warn("Google Sheets fetch failed, using mock data:", err);
         setError(err);
-        setEvents(mockRows.map(reformatRow));
+        // mockRows are already plain objects matching the reformatRow output shape
+        setEvents(mockRows);
       } finally {
         setLoading(false);
       }
