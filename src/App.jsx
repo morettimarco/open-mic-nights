@@ -25,11 +25,18 @@ export default function App() {
   const [detailOpen, setDetailOpen] = useState(false);
   const [submitOpen, setSubmitOpen] = useState(false);
 
-  // Derive sorted unique categories from actual data
+  // Derive sorted unique categories from actual data (used for filter chips)
   const availableCategories = useMemo(() => {
     const cats = new Set(events.map((e) => e.Category).filter(Boolean));
     return [...cats].sort();
   }, [events]);
+
+  // Form dropdown merges data-driven categories with hardcoded extras not yet in the sheet
+  const EXTRA_FORM_CATEGORIES = ["Improv", "Quiz", "Roast"];
+  const formCategories = useMemo(() => {
+    const cats = new Set([...availableCategories, ...EXTRA_FORM_CATEGORIES]);
+    return [...cats].sort();
+  }, [availableCategories]);
 
   const filtered = useMemo(() => {
     return events.filter((e) => {
@@ -86,7 +93,7 @@ export default function App() {
         isFavorite={selectedEvent ? favorites.has(selectedEvent.Name) : false}
         onToggleFavorite={toggleFavorite}
       />
-      <SubmitForm open={submitOpen} onClose={() => setSubmitOpen(false)} availableCategories={availableCategories} />
+      <SubmitForm open={submitOpen} onClose={() => setSubmitOpen(false)} availableCategories={formCategories} />
     </div>
   );
 }
