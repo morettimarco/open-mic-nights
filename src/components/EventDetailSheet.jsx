@@ -1,8 +1,23 @@
 import React from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet";
 import { Badge } from "./ui/badge";
-import { MapPin, Clock, Globe, Instagram, Facebook, Mail, Phone, ExternalLink, Mic, Users, Accessibility, Heart, User } from "lucide-react";
+import { Button } from "./ui/button";
+import { MapPin, Clock, Globe, Instagram, Facebook, Mail, Phone, ExternalLink, Mic, Users, Accessibility, Heart, User, CalendarCheck } from "lucide-react";
 import { cn } from "../lib/utils";
+
+/** Resolves the URL to open when "Book a spot" is clicked.
+ *  Returns null when the button should be hidden. */
+function resolveBookingUrl(event) {
+  const method = (event.ContactBooking || "").toLowerCase();
+  if (!method) return null;
+
+  if (method.includes("instagram")) return event.Instagram || null;
+  if (method.includes("form"))      return event.GForm     || null;
+  if (method.includes("whatsapp") || method.includes("telegram")) return event.WhatsApp || null;
+  if (method.includes("email"))     return event.Email ? `mailto:${event.Email}` : null;
+
+  return null;
+}
 
 function InfoRow({ icon: Icon, label, value, href }) {
   const content = (
@@ -24,6 +39,8 @@ function InfoRow({ icon: Icon, label, value, href }) {
 
 export default function EventDetailSheet({ event, open, onClose, isFavorite, onToggleFavorite }) {
   if (!event) return null;
+
+  const bookingUrl = resolveBookingUrl(event);
 
   return (
     <Sheet open={open} onOpenChange={onClose}>
@@ -49,6 +66,18 @@ export default function EventDetailSheet({ event, open, onClose, isFavorite, onT
             {event.Language && <Badge variant="secondary">{event.Language}</Badge>}
             {event.Level && <Badge variant="secondary">{event.Level}</Badge>}
           </div>
+
+          {/* Book a spot */}
+          {bookingUrl && (
+            <div className="mt-4">
+              <Button asChild className="w-full sm:w-auto gap-2">
+                <a href={bookingUrl} target="_blank" rel="noopener noreferrer">
+                  <CalendarCheck className="w-4 h-4" />
+                  Book a spot
+                </a>
+              </Button>
+            </div>
+          )}
         </SheetHeader>
 
         <div className="divide-y divide-slate-100 dark:divide-slate-800">

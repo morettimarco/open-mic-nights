@@ -33,6 +33,7 @@ function reformatRow(row) {
     Description: get("Event Description"),
     OrganizerName: get("Organizer Name"),
     GForm: get("Google Form"),
+    ContactBooking: get("Contact / Book a Spot"),
     UpdateInfoFormLink: get("Update Info Form Link"),
   };
 }
